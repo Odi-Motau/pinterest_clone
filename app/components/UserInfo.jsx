@@ -1,4 +1,4 @@
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React from 'react'
@@ -6,6 +6,7 @@ import React from 'react'
 function UserInfo({userInfo}) {
     console.log(userInfo);
     const router=useRouter();
+    const {data:session}=useSession()
     const onLogoutClick=()=>{
       signOut();
       router.push('/');
@@ -23,9 +24,9 @@ function UserInfo({userInfo}) {
      <h2 className='text-gray-400'>{userInfo.email}</h2>
      <button className='bg-gray-200
       p-2 px-3 font-semibold mt-5 rounded-full'>Share</button>
-        <button className='bg-gray-200
+        {session?.user.email == userInfo.email? <button className='bg-gray-200
       p-2 px-3 font-semibold mt-5 rounded-full'
-      onClick={()=>onLogoutClick()}>Logout</button>
+      onClick={()=>onLogoutClick()}>Logout</button>:null}
     </div>
   )
 }
